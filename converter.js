@@ -1,3 +1,4 @@
+require('dotenv').config();
 const readline = require('readline');
 const axios = require('axios');
 
@@ -6,8 +7,15 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-const apiKey = 'YmFSS5dn7GdLM4shNu85LXTOkECkTWjs'
-const apiUrl = 'https://api.apilayer.com/exchangerates_data'
+const apiKey = process.env.API_KEY;
+const apiUrl = 'https://api.apilayer.com/exchangerates_data';
+
+// Check if API key is loaded
+if (!apiKey) {
+  console.error('Error: API_KEY not found in environment variables.');
+  console.error('Please create a .env file with: API_KEY=your-api-key-here');
+  process.exit(1);
+}
 
 // Common currency codes
 const commonCurrencies = new Set([
@@ -17,6 +25,7 @@ const commonCurrencies = new Set([
 
 rl.question('Enter the base currency: ', (base) => {
   const baseCurrency = base.toUpperCase();
+  
   if (!commonCurrencies.has(baseCurrency)) {
     console.log('Invalid base currency code. Please use a valid 3-letter currency code (e.g., USD, EUR, GBP).');
     rl.close();
@@ -25,21 +34,22 @@ rl.question('Enter the base currency: ', (base) => {
 
   rl.question('Enter the target currency: ', (target) => {
     const targetCurrency = target.toUpperCase();
+    
     if (!commonCurrencies.has(targetCurrency)) {
       console.log('Invalid target currency code. Please use a valid 3-letter currency code (e.g., USD, EUR, GBP).');
       rl.close();
       return;
     }
 
-    rl.question('Enter the amount to convert: ', async (amount) => {
+    rl.question('Enter the amount to convert: ', (amount) => {
       if (isNaN(amount) || amount <= 0) {
         console.log('Please enter a valid positive number for the amount.');
         rl.close();
         return;
       }
 
-      const url = `${apiUrl}/convert?to=${targetCurrency}&from=${baseCurrency}&amount=${amount}`
-
+      const url = `${apiUrl}/convert?to=${targetCurrency}&from=${baseCurrency}&amount=${amount}`;
+      
       axios.get(url, {
         headers: {
           'apikey': apiKey
@@ -74,3 +84,4 @@ rl.question('Enter the base currency: ', (base) => {
     });
   });
 });
+
