@@ -15,7 +15,7 @@ const commonCurrencies = new Set([
   'SEK', 'KRW', 'SGD', 'NOK', 'MXN', 'HKD', 'TRY', 'RUB', 'ZAR', 'BRL'
 ]);
 
-rl.question('Enter the base currency (ex. USD): ', (base) => {
+rl.question('Enter the base currency: ', (base) => {
   const baseCurrency = base.toUpperCase();
   if (!commonCurrencies.has(baseCurrency)) {
     console.log('Invalid base currency code. Please use a valid 3-letter currency code (e.g., USD, EUR, GBP).');
@@ -23,7 +23,7 @@ rl.question('Enter the base currency (ex. USD): ', (base) => {
     return;
   }
 
-  rl.question('Enter the target currency (ex. EUR): ', (target) => {
+  rl.question('Enter the target currency: ', (target) => {
     const targetCurrency = target.toUpperCase();
     if (!commonCurrencies.has(targetCurrency)) {
       console.log('Invalid target currency code. Please use a valid 3-letter currency code (e.g., USD, EUR, GBP).');
